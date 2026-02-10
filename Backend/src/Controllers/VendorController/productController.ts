@@ -43,4 +43,3 @@ export const newProductHandler = async(req : Request , res : Response) => {
         })
     }
 }
-
