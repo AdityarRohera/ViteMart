@@ -2,7 +2,8 @@ import express from 'express'
 const vendorInventoryRoute = express.Router()
 
 import { newInventoryHandler } from '../../Controllers/VendorController/inventoryController.js';
-vendorInventoryRoute.post('/new_inventory' , newInventoryHandler);
-// vendorInventoryRoute.patch('/update_inventory' , updateInventoryHandler);
+import { isVendor, userAuth } from '../../Middlewares/auth.js';
+
+vendorInventoryRoute.post('/newInventory' , userAuth , isVendor , newInventoryHandler);
 
 export default vendorInventoryRoute;

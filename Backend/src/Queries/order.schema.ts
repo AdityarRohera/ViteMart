@@ -6,9 +6,15 @@ export const createOrderQuery = `
     RETURNING *;
 `
 
-export const updateOrdersQuery = `
+export const IncreaseOrdersQuery = `
     UPDATE orders
-    SET total_products = total_products + 1,
-    total_amount = $1
-    WHERE id = $2;
+    SET total_products = total_products + $1,
+    total_amount = $2
+    WHERE id = $3;
+`
+export const DecreaseOrdersQuery = `
+    UPDATE orders
+    SET total_products = total_products - $1,
+    total_amount = $2
+    WHERE id = $3;
 `

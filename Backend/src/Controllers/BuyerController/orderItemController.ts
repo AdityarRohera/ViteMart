@@ -10,6 +10,9 @@ export const newOrderItemHandler = async(req : Request , res : Response) => {
         
         console.log("1 Inside new order item handler")
         const {product_id , order_id , quantity} = req.body;
+        const buyer_id = (req as AuthenticatedRequest).user.userId;
+
+        console.log("getting data in order items -> " , product_id , order_id , quantity)
 
         if(!product_id || !order_id){
             return res.status(400).send({
@@ -19,7 +22,7 @@ export const newOrderItemHandler = async(req : Request , res : Response) => {
         }
 
         // Now create new order Items (perform transition)
-        const orderItem = await newOrderItem({product_id , order_id , quantity})
+        const orderItem = await newOrderItem({product_id , order_id , quantity , buyer_id})
         
         return res.status(200).send({
             success : true,
@@ -48,9 +51,9 @@ export const updateOrderItemHandler = async(req : Request , res : Response) => {
     try{
         
         console.log("1 Inside update order item handler")
-        const {quantity , orderItem_id} = req.body;
+        const {quantity , orderItem_id , status} = req.body;
 
-        if(!orderItem_id || !quantity){
+        if(!orderItem_id || !status){
             return res.status(400).send({
                 success : false,
                 message : "Invalid data"
@@ -58,7 +61,7 @@ export const updateOrderItemHandler = async(req : Request , res : Response) => {
         }
 
         // Now create new order Items (perform transition)
-        const orderItem = await updateOrderItem({orderItem_id , quantity})
+        const orderItem = await updateOrderItem({orderItem_id , quantity , status})
         
         return res.status(200).send({
             success : true,

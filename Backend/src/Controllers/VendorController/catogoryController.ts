@@ -1,27 +1,25 @@
-import type { Request , Response } from "express";
-// import type { AuthenticatedRequest } from "../../Middlewares/auth.js";
+import type{ Request , Response } from "express";
+import { newCategory } from "../../Services/vendors/category.service.js";
 
-import { newInventory } from "../../Services/vendors/inventory.service.js";
-
-export const newInventoryHandler = async(req : Request , res : Response) => {
+export const newCategoryHandler = async(req : Request , res : Response) => {
     try{
         console.log("1 Inside new inventory handler")
-        const {product_id , quantity_available , location} = req.body;
-        
-        if(!product_id || !quantity_available || !location){
+        const {name , description} = req.body;
+
+        if(!name || typeof name !== "string"){
             return res.status(400).send({
                 success : false,
                 message : "Invalid data"
             })
         }
 
-        // Create new products
-        const Inventory = await newInventory({product_id , quantity_available , location});
+        // Create new category
+        const category = await newCategory({name , description});
         
         return res.status(200).send({
             success : true,
             message : 'New Inventory created successfully',
-            product : Inventory.rows[0]
+            data : category.rows[0]
         })
         
     } catch(err : unknown){

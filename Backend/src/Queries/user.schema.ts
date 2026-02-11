@@ -2,14 +2,14 @@
 
 // find users
 export const findUserByEmail = `
-SELECT * FROM "users" 
+SELECT * FROM "users"
 WHERE email = $1;
 `
 
 // Insert new user
 export const insertUser = `
-INSERT INTO users(name , email , password , role , location , contact)
-VALUES($1 , $2 , $3 , $4 , $5 , $6)
+INSERT INTO users(name , email , password , role)
+VALUES($1 , $2 , $3 , $4)
 RETURNING name , email , role
 `
 

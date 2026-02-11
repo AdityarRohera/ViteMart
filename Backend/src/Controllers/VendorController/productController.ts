@@ -7,11 +7,10 @@ export const newProductHandler = async(req : Request , res : Response) => {
     try{
         console.log("1 Inside new product handler")
         const vendor_id = (req as AuthenticatedRequest).user.userId;
-        console.log("2 getting vendor_id -> " , vendor_id);
         
-        const {label , quantity , buying_price , selling_price , category_id , product_url} = req.body;
+        const {label , buying_price , selling_price , category_id , product_url} = req.body;
 
-        if(!label || !quantity || !buying_price || !selling_price || !product_url){
+        if(!label || !buying_price || !selling_price || !product_url){
             return res.status(400).json({
                 success : false,
                 message : "Invalide data"
@@ -19,7 +18,7 @@ export const newProductHandler = async(req : Request , res : Response) => {
         }
 
         // Create new products
-        const product = await newProduct({label , quantity , buying_price , selling_price , category_id , product_url , vendor_id});
+        const product = await newProduct({label , buying_price , selling_price , category_id , product_url , vendor_id});
         
         return res.status(200).send({
             success : true,

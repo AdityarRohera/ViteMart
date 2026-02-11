@@ -65,7 +65,7 @@ export const isAdmin = async(req : Request , res : Response , next : any) => {
         if(userRole.rows[0].role !== 'Admin'){
             return res.status(400).send({
                 success : false,
-                message : `Your Role is ${userRole.rows[0].role} , so you are not allowed to access this route`
+                message : `Your Role is ${userRole.rows[0].role} , so you are not allowed to access admin route`
             })
         }
 
@@ -100,7 +100,7 @@ export const isBuyer = async(req : Request , res : Response , next : any) => {
         if(userRole.rows[0].role !== 'Buyer'){
             return res.status(400).send({
                 success : false,
-                message : `Your Role is ${userRole.rows[0].role} , so you are not allowed to access this route`
+                message : `Your Role is ${userRole.rows[0].role} , so you are not allowed to access buyers route`
             })
         }
 
@@ -135,7 +135,7 @@ export const isVendor = async(req : Request , res : Response , next : any) => {
         if(userRole.rows[0].role !== 'Vendor'){
             return res.status(400).send({
                 success : false,
-                message : `Your Role is ${userRole.rows[0].role} , so you are not allowed to access this route`
+                message : `Your Role is ${userRole.rows[0].role} , so you are not allowed to access vendor route`
             })
         }
 
