@@ -13,6 +13,6 @@ VALUES($1 , $2 , $3 , $4)
 RETURNING name , email , role
 `
 
-export const userRole = `
-SELECT role from "users" WHERE id = $1;
+export const getUserQuery = `
+SELECT id , name , email , role from "users" WHERE id = $1;
 `

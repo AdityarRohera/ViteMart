@@ -5,7 +5,7 @@ import type { AuthenticatedRequest } from "../Middlewares/auth.js";
 
 
 // import user services here 
-import { findUser , newUser } from "../Services/user.service.js";
+import { findUser , getUser, newUser } from "../Services/user.service.js";
 
 
 // Register user
@@ -91,15 +91,15 @@ export const loginUserHandler = async(req : Request , res : Response) => {
         // token
         const token = jwt.sign({
             userId : user.rows[0].id
-        } , process.env.SECRET!);
+        } , process.env.SECRET! , {expiresIn: '1d'});
 
         
-        return res.status(200).send({
-            success : true,
-            message : 'User login successfully',
-            token : token,
-            user : {id : user.rows[0].id , email : user.rows[0].email , role : user.rows[0].role}
-        })
+        return res.cookie("token" , token , {  maxAge: 1 * 24 * 60 * 60 * 1000 , httpOnly: true , secure : false ,  sameSite: "lax"}).status(200).send({
+                success : true,
+                message : "Login successfully",
+                token : token,
+                user : {id : user.rows[0].id , email : user.rows[0].email , role : user.rows[0].role}
+             })
         
     } catch(err : unknown){
         console.log("Error comes in User login -> " , err);
@@ -118,15 +118,27 @@ export const loginUserHandler = async(req : Request , res : Response) => {
     }
 }
 
+export const logoutHandler = (req: Request, res: Response) => {
+  res.clearCookie("token");
+  
+  return res.status(200).json({
+    success: true,
+    message: "Logout successful"
+  });
+};
+
+
 export const userProfile = async(req : Request , res : Response) => {
     try{
 
-        const buyer_id = (req as AuthenticatedRequest).user.userId
+        const userId = (req as AuthenticatedRequest).user.userId
+        const user = await getUser(userId);
+        console.log(user.rows[0])
         
         return res.status(200).send({
             success : true,
             message : 'User successfully',
-            data : buyer_id
+            user : user.rows[0]
         })
         
     } catch(err : unknown){

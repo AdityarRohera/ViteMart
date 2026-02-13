@@ -1,6 +1,16 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+
+   const cookie = await cookies();
+   const token = cookie.get("token")?.value;
+
+  if (token) {
+    redirect("/dashboard");
+  }
+  
   return (
     <main className="w-full bg-gray-50">
       {/* Hero Section */}

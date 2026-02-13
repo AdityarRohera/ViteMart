@@ -3,9 +3,25 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { Menu, X, ShoppingBag } from 'lucide-react'
+import { useEffect } from 'react'
+import { logout } from '@/services/operations/auth'
+import { useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
+import { useUser } from '@/context/UserProvider'
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false)
+   const [open, setOpen] = useState(false);
+   const router = useRouter()
+   const pathname = usePathname();
+   const {user , setUser} = useUser();
+
+  // console.log("context user -> " , user);
+
+  const logoutHandler = async() => {
+    await logout();
+    setUser(null);
+    router.push('/login')
+  }
 
   return (
     <nav className="w-full bg-white shadow-md">
@@ -20,14 +36,16 @@ export default function Navbar() {
 
         {/* Desktop Routes */}
         <div className="hidden md:flex items-center gap-8 text-gray-700 font-medium">
-          <Link href="/" className="hover:text-indigo-600 transition">Home</Link>
-          <Link href="/shop" className="hover:text-indigo-600 transition">Shop</Link>
-          <Link href="/about" className="hover:text-indigo-600 transition">About</Link>
-          <Link href="/contact" className="hover:text-indigo-600 transition">Contact</Link>
+          <Link href={`${user ? '/dashboard' : '/'}`} className={`hover:text-indigo-600 transition ${pathname === '/' || pathname === '/dashboard' ? 'text-indigo-600' : ''}`}>{user ? "Dashboard" : "Home"}</Link>
+          <Link href="/shop" className={`hover:text-indigo-600 transition ${pathname === '/shop' ? 'text-indigo-600' : ''}`}>Shop</Link>
+          <Link href="/about" className={`hover:text-indigo-600 transition ${pathname === '/about' ? 'text-indigo-600' : ''}`}>About</Link>
+          <Link href="/contact" className={`hover:text-indigo-600 transition ${pathname === '/contact' ? 'text-indigo-600' : ''}`}>Contact</Link>
         </div>
 
         {/* Auth Buttons */}
-        <div className="hidden md:flex items-center gap-4">
+        {
+          !user &&
+          <div className="hidden md:flex items-center gap-4">
           <Link
             href="/login"
             className="px-4 py-2 border border-gray-300 text-black rounded-lg hover:bg-gray-100 transition"
@@ -42,6 +60,17 @@ export default function Navbar() {
             Register
           </Link>
         </div>
+        }
+
+        {
+          user &&
+          <button
+            onClick={logoutHandler}
+            className="px-5 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition shadow"
+          >
+            Logout
+          </button>
+        }
 
         {/* Mobile Menu Button */}
         <button
