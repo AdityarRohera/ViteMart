@@ -1,9 +1,9 @@
 import type{ Request , Response } from "express";
-import { newCategory } from "../../Services/vendors/category.service.js";
+import { getCategories, newCategory } from "../../Services/vendors/category.service.js";
 
 export const newCategoryHandler = async(req : Request , res : Response) => {
     try{
-        console.log("1 Inside new inventory handler")
+        console.log("1 Inside new category handler")
         const {name , description} = req.body;
 
         if(!name || typeof name !== "string"){
@@ -18,12 +18,12 @@ export const newCategoryHandler = async(req : Request , res : Response) => {
         
         return res.status(200).send({
             success : true,
-            message : 'New Inventory created successfully',
+            message : 'New category created successfully',
             data : category.rows[0]
         })
         
     } catch(err : unknown){
-        console.log("Error comes in new Inventory handler-> " , err);
+        console.log("Error comes in new category handler-> " , err);
         let errmessage;
         if(err instanceof Error){
             errmessage = err.message
@@ -33,7 +33,36 @@ export const newCategoryHandler = async(req : Request , res : Response) => {
 
         res.status(500).send({
             status : false,
-            message : "Something wrong in new Inventory handler",
+            message : "Something wrong in new category handler",
+            error : errmessage
+        })
+    }
+}
+
+export const getCategoriesHandler = async(req : Request , res : Response) => {
+    try{
+
+        console.log("1 Inside get categories handler")
+        const category = await getCategories();
+
+        return res.status(200).send({
+            success : true,
+            message : 'Categories fetched successfully',
+            categories : category.rows
+        })
+        
+    } catch(err : unknown){
+        console.log("Error comes in getting categories handler-> " , err);
+        let errmessage;
+        if(err instanceof Error){
+            errmessage = err.message
+        } else if(typeof err === "string"){
+            errmessage = err
+        }
+
+        res.status(500).send({
+            status : false,
+            message : "Something wrong in getting categories",
             error : errmessage
         })
     }

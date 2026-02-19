@@ -3,6 +3,8 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import cookieParser from "cookie-parser";
 dotenv.config()
+import cloudinaryConnect from './Config/cloudinaryConfig.js';
+cloudinaryConnect();
 
 const app = express()
 const port = process.env.PORT || 3000; 
@@ -27,12 +29,16 @@ app.use('/api/v1' , vendorInventoryRoute);
 app.use('/api/v1' , vendorsOrdersRoute)
 app.use('/api/v1' , catogoryRoute)
 
+// common routes
+import cloudinaryUploadRoute from './Routes/common/CloudinaryUploadRoute.js';
+app.use('/api/v1' , cloudinaryUploadRoute);
 
 
 // Buyers api import and use 
 import buyerProductRoute from './Routes/Buyers/ProductRoute.js';
 import buyerOderRoute from './Routes/Buyers/OrderRoute.js';
 import orderItemsRoute from './Routes/Buyers/OrderItemsRoute.js';
+
 app.use('/api/v1' , buyerProductRoute);
 app.use('/api/v1' , buyerOderRoute);
 app.use('/api/v1' , orderItemsRoute);

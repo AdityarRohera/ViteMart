@@ -30,8 +30,8 @@ export async function VendorDashboard({user} : any) {
             <div className='flex gap-10 items-center'>
               {
                 manageCardData.map((card: any) => {
-                  const {name , color , desc , Icon} = card
-                  return <ManageRouteCard name={name} color={color} desc={desc} Icon={Icon}/>
+                  const {name , color , desc , Icon , key} = card
+                  return <ManageRouteCard key={key} name={name} color={color} desc={desc} Icon={Icon}/>
                 })
               }
             </div>
