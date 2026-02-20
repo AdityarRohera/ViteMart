@@ -3,24 +3,94 @@
 
 import Image from "next/image";
 import { Heart, Star } from "lucide-react";
+import { useUser } from "@/context/UserProvider";
+import { redirect } from "next/navigation";
+import { createOrder, newOrderItem } from "@/services/operations/buyer/orderAndCart";
+import CartButton from "./CartButton";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { IncreaseCartQuantity , DecreaseCartQuantity } from "@/services/operations/buyer/orderAndCart";
 
 interface ProductCardProps {
+  id : string;
   image: string;
   title: string;
   price: number;
   originalPrice?: number;
   rating?: number;
   reviews?: number;
+ cartQuantity? : number;
+ orderItemID? : string;
 }
 
 export default function ProductCard({
+  id,
   image,
   title,
   price,
   originalPrice,
   rating,
   reviews,
+  cartQuantity,
+  orderItemID,
 }: ProductCardProps) {
+
+  console.log(cartQuantity);
+
+  const [orderCartQuantity , setOrderCartQuantity] = useState(cartQuantity);
+  const quantity = cartQuantity ?? 0;
+  const router = useRouter();
+
+
+  const AddToCartHandler = async(e : any) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log("Inside add to cart handler");
+
+      // create order with status pending 
+
+      const newOrder = await createOrder()
+      console.log("Inside form submit order -> " , newOrder);
+
+      // Add this product to cartItems
+      const orderItem = await newOrderItem({product_id : id , order_id : newOrder.id , quantity : 1});
+      console.log("Inside form submit order item -> " , orderItem);
+
+      router.refresh();
+  }
+
+  const increase = async () => {
+    await IncreaseCartQuantity({
+      quantity: 1,
+      orderItem_id: orderItemID,
+      status: "Increase"
+    });
+
+    setOrderCartQuantity((prev : any) => prev + 1);
+  };
+
+  const decrease = async () => {
+    const response = await DecreaseCartQuantity({
+      quantity: 1,
+      orderItem_id: orderItemID,
+      status: "Decrease"
+    });
+
+    console.log(response);
+
+    if (response?.deleted) {
+      router.refresh();
+      return;
+    }
+
+    setOrderCartQuantity((prev : any) => prev - 1);
+  };
+
+  useEffect(() => {
+    setOrderCartQuantity(cartQuantity)
+  } , [cartQuantity])
+
+
   return (
     <div className="w-80 bg-white rounded-2xl shadow-md p-4 
       hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
@@ -67,10 +137,17 @@ export default function ProductCard({
       )}
 
       {/* Add to cart */}
-      <button className="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg 
-        hover:bg-blue-700 font-medium transition">
-        Add to Cart
-      </button>
+
+      {
+          quantity > 0 ?  
+          (<CartButton quantity={orderCartQuantity} increase={increase} decrease={decrease} />) :
+
+          (<button onClick={AddToCartHandler} className="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg 
+          hover:bg-blue-700 font-medium transition cursor-pointer">
+          Add to Cart
+          </button>)
+      }
+
     </div>
   );
 }

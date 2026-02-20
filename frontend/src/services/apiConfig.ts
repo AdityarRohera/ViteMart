@@ -28,6 +28,20 @@ export const VENDORS_Manage_Inventory_ENDPOINT = {
     GETINVENTORY : '/inventory'
 }
 
+
+// buyer's Endpoinds 
+export const BUYERS_PRODUCT_ENDPOINT = {
+    ALLPRODUCTS : '/buyer/products',
+    SINGLEPRODUCT : '/buyer/singleProduct'
+}
+
+export const BUYERS_ORDER_ENDPOINT = {
+    CREATEORDER : `/createorder`,
+    CREATEORDERITEM : '/neworder_item',
+    GETALLORDERITEMS : '/order/items',
+    UPDATEORDERITEM : '/updateorder_item'
+}
+
 // export const PAYMENT_API_ENDPOINT = {
 //     CREATE_ORDER : '/payment/create-order',
 //     VERIFY_PAYMENT : '/payment/verify-payment'

@@ -7,12 +7,14 @@ import { useEffect, useState } from "react";
 export default  function ProductsPage() {
 
   const [productData , setProductData] = useState([]);
+  const [loading , setLoading] = useState(true);
   console.log(productData)
 
   useEffect(() => {
     const loadAllProducts = async() => {
       const products = await getAllProducts();
       setProductData(products);
+      setLoading(false);
     }
 
     loadAllProducts();
@@ -65,6 +67,8 @@ export default  function ProductsPage() {
       status: "Draft",
     },
   ];
+
+  if(loading) return <div>Loading...</div>
 
   return (
     <div className="p-12 flex flex-col gap-8 bg-gray-50 min-h-screen">
