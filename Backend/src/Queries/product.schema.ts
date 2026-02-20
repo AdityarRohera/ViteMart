@@ -51,3 +51,32 @@ SELECT P.id,
     WHERE P.vendor_id = $1;
 
 `
+
+// buyer's Query 
+
+// ALl shoping products of buyer's 
+export const buyersProductQuery = `
+SELECT 
+       P.id,
+       P.label,
+       P.selling_price,
+       C.name AS category_name,
+       P.product_url
+FROM products P
+JOIN categories C ON C.id = P.category_id
+WHERE P.status = 'Published';
+`;
+
+// Getting single shop products
+export const singleBuyersProductQuery = `
+SELECT 
+       P.id,
+       P.label,
+       P.description,
+       P.selling_price,
+       C.name AS category_name,
+       P.product_url
+FROM products P
+JOIN categories C ON C.id = P.category_id
+WHERE P.id = $1;
+`;

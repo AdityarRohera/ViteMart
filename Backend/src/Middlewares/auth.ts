@@ -60,7 +60,7 @@ export const isAdmin = async(req : Request , res : Response , next : any) => {
 
         // get role of user
         const userRole = await getUser(userId);
-        console.log("Getting userRole in isAdmin -> " , userRole.rows[0]);
+        // console.log("Getting userRole in isAdmin -> " , userRole.rows[0]);
         if(userRole.rows[0].role !== 'Admin'){
             return res.status(400).send({
                 success : false,
@@ -91,7 +91,7 @@ export const isBuyer = async(req : Request , res : Response , next : any) => {
 
         const AuthRequest = req as AuthenticatedRequest
         const {userId} = AuthRequest.user
-        console.log("IsBuyer getting user id -> " , userId);
+        // console.log("IsBuyer getting user id -> " , userId);
 
         // get role of user
         const userRole = await getUser(userId);
@@ -127,7 +127,7 @@ export const isVendor = async(req : Request , res : Response , next : any) => {
 
         const AuthRequest = req as AuthenticatedRequest
         const {userId} = AuthRequest.user
-        console.log("IsVendor getting user id -> " , userId);
+        // console.log("IsVendor getting user id -> " , userId);
 
         // get role of user
         const userRole = await getUser(userId);

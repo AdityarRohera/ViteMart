@@ -2,16 +2,27 @@
 import type { Request , Response } from "express";
 import type { AuthenticatedRequest } from "../../Middlewares/auth.js";
 
-import { createOrder } from "../../Services/Buyers/order.service.js";
+import { checkOrderCreated, createOrder } from "../../Services/Buyers/order.service.js";
 
 export const createOrderHandler = async(req : Request , res : Response) => {
     try{
         
         console.log("1 Inside buyer order create handler")
         const buyer_id = (req as AuthenticatedRequest).user.userId;
-        const {delivery_at} = req.body;
 
-        const order = await createOrder({buyer_id , delivery_at});
+        // first check order already created or not
+        const checkOrder = await checkOrderCreated(buyer_id);
+
+        if(checkOrder.rowCount !== 0){
+            return res.status(200).send({
+                 success : true,
+                 message : 'order get successfully',
+                 order : checkOrder.rows[0]
+            })
+        }
+
+        // if not create order before then create new order
+        const order = await createOrder(buyer_id);
         
         return res.status(200).send({
             success : true,

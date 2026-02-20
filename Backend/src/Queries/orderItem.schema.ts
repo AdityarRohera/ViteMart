@@ -6,17 +6,33 @@ export const newOrderItemQuery = `
     RETURNING *;
 `
 
-export const incraseOrderItemQuery = `
+// export const incraseOrderItemQuery = `
+//     UPDATE orderItems
+//     SET quantity = quantity + $1
+//     WHERE id = $2
+//     RETURNING *;
+// `
+// export const decreaseOrderItemQuery = `
+//     UPDATE orderItems
+//     SET quantity = quantity - $1
+//     WHERE id = $2
+//     RETURNING *;
+// `
+
+export const updateOrderItemsQuery = `
     UPDATE orderItems
-    SET quantity = quantity + $1
+    SET quantity = $1
     WHERE id = $2
     RETURNING *;
 `
-export const decreaseOrderItemQuery = `
-    UPDATE orderItems
-    SET quantity = quantity - $1
-    WHERE id = $2
-    RETURNING *;
+
+export const deletOrderItemQuery = `
+    DELETE FROM orderitems WHERE id = $1;
+`
+export const findOrderItemQuery = `
+    SELECT OI.id , OI.order_id , OI.quantity , P.selling_price FROM orderitems OI
+    JOIN products P ON P.id = OI.product_id
+    WHERE OI.id = $1;
 `
 
 export const getOrderItemProductQuery = `
@@ -38,5 +54,14 @@ export const checkItemAddedOrNotQuery = `
     JOIN orders O ON O.id = OI.order_id
     WHERE OI.product_id = $1
     AND O.buyers_id = $2
-    AND O.status = 'pending';
+    AND O.status = 'cart';
+`
+
+export const getAllOrderItemsQuery = `
+    SELECT OI.product_id, OI.quantity , OI.id
+    FROM orderitems OI
+    JOIN orders O ON O.id = OI.order_id
+    WHERE O.buyers_id = $1
+    AND O.status = 'cart';
+
 `

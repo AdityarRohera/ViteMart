@@ -3,7 +3,7 @@ import type { Request , Response } from "express";
 import type { AuthenticatedRequest } from "../../Middlewares/auth.js";
 
 import { createOrder } from "../../Services/Buyers/order.service.js";
-import { newOrderItem , updateOrderItem } from "../../Services/Buyers/orderItem.service.js";
+import { getAllOrderItems, newOrderItem , updateOrderItem } from "../../Services/Buyers/orderItem.service.js";
 
 export const newOrderItemHandler = async(req : Request , res : Response) => {
     try{
@@ -12,11 +12,11 @@ export const newOrderItemHandler = async(req : Request , res : Response) => {
         const {product_id , order_id , quantity} = req.body;
         const buyer_id = (req as AuthenticatedRequest).user.userId;
 
-        console.log("getting data in order items -> " , product_id , order_id , quantity)
+        console.log("getting data in order items -> " , order_id , quantity)
 
         if(!product_id || !order_id){
             return res.status(400).send({
-                success : false,
+                status : false,
                 message : "Invalid data"
             })
         }
@@ -25,18 +25,28 @@ export const newOrderItemHandler = async(req : Request , res : Response) => {
         const orderItem = await newOrderItem({product_id , order_id , quantity , buyer_id})
         
         return res.status(200).send({
-            success : true,
+            status : true,
             message : 'orderItem created successfully',
-            data : orderItem.rows[0]
+            orderItem : orderItem.rows[0]
         })
         
     } catch(err : unknown){
         console.log("Error comes in new OrderItem Handler-> " , err);
+
+
         let errmessage;
         if(err instanceof Error){
             errmessage = err.message
         } else if(typeof err === "string"){
             errmessage = err
+        }
+
+         // Expected error from service (duplicate etc.)
+        if (err instanceof Error && err.message === "This order is already add in order items") {
+          return res.status(400).json({
+            status: false,
+            message: err.message,
+          });
         }
 
         res.status(500).send({
@@ -60,13 +70,12 @@ export const updateOrderItemHandler = async(req : Request , res : Response) => {
             })
         }
 
-        // Now create new order Items (perform transition)
-        const orderItem = await updateOrderItem({orderItem_id , quantity , status})
+        const result = await updateOrderItem({orderItem_id , quantity , status})
         
         return res.status(200).send({
             success : true,
             message : 'orderItem updated successfully',
-            data : orderItem.rows[0]
+            result : result
         })
         
     } catch(err : unknown){
@@ -81,6 +90,37 @@ export const updateOrderItemHandler = async(req : Request , res : Response) => {
         res.status(500).send({
             status : false,
             message : "Something wrong in update orderItem handlerr",
+            error : errmessage
+        })
+    }
+}
+
+export const getAllOrderItemsHandler = async(req : Request , res : Response) => {
+    try{
+        
+        console.log("1 Inside get order item handler")
+        const buyer_id = (req as AuthenticatedRequest).user.userId;
+
+        const orderItems = await getAllOrderItems(buyer_id)
+        
+        return res.status(200).send({
+            success : true,
+            message : 'orderItem updated successfully',
+            orderItems : orderItems.rows
+        })
+        
+    } catch(err : unknown){
+        console.log("Error comes in getting all OrderItems Handler-> " , err);
+        let errmessage;
+        if(err instanceof Error){
+            errmessage = err.message
+        } else if(typeof err === "string"){
+            errmessage = err
+        }
+
+        res.status(500).send({
+            status : false,
+            message : "Something wrong in getting all orderItems handlerr",
             error : errmessage
         })
     }

@@ -1,8 +1,8 @@
 import express from 'express'
 const buyerOderRoute = express.Router()
 
-import { newOrderItemHandler } from '../../Controllers/BuyerController/orderItemController.js';
+import { createOrderHandler } from '../../Controllers/BuyerController/orderController.js';
 import { isBuyer, userAuth } from '../../Middlewares/auth.js';
-buyerOderRoute.post('/createorder' , userAuth , isBuyer , newOrderItemHandler);
+buyerOderRoute.post('/createorder' , userAuth , isBuyer , createOrderHandler);
 
 export default buyerOderRoute;
