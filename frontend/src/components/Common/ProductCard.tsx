@@ -35,7 +35,7 @@ export default function ProductCard({
   orderItemID,
 }: ProductCardProps) {
 
-  console.log(cartQuantity);
+  console.log(cartQuantity , orderItemID);
 
   const [orderCartQuantity , setOrderCartQuantity] = useState(cartQuantity);
   const quantity = cartQuantity ?? 0;
@@ -128,7 +128,7 @@ export default function ProductCard({
 
       {/* Rating */}
       {rating && (
-        <div className="flex items-center gap-2 mt-2 text-xs">
+        <div className="flex items-center gap-2 mt-2 text-xs mb-3">
           <span className="bg-green-600 text-white px-2 py-0.5 rounded flex items-center gap-1">
             {rating} <Star size={12} />
           </span>

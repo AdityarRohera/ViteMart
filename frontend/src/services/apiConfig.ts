@@ -42,6 +42,10 @@ export const BUYERS_ORDER_ENDPOINT = {
     UPDATEORDERITEM : '/updateorder_item'
 }
 
+export const PAYMENTS_ENDPOINTS = {
+    CREATEORDER : '/payment/create-order'
+}
+
 // export const PAYMENT_API_ENDPOINT = {
 //     CREATE_ORDER : '/payment/create-order',
 //     VERIFY_PAYMENT : '/payment/verify-payment'

@@ -62,6 +62,7 @@ export const updateOrderItemHandler = async(req : Request , res : Response) => {
         
         console.log("1 Inside update order item handler")
         const {quantity , orderItem_id , status} = req.body;
+        console.log(orderItem_id)
 
         if(!orderItem_id || !status){
             return res.status(400).send({
@@ -102,11 +103,42 @@ export const getAllOrderItemsHandler = async(req : Request , res : Response) => 
         const buyer_id = (req as AuthenticatedRequest).user.userId;
 
         const orderItems = await getAllOrderItems(buyer_id)
+        console.log(orderItems.rows)
+
+         // if cart empty
+        if (orderItems.rows.length === 0) {
+          return res.status(200).send({
+            success: true,
+            message: "Cart is empty",
+            orderItems: {
+              order_id: null,
+              total_products: 0,
+              total_amount: 0,
+              items: []
+            }
+          });
+        }
+
+        // structure orderItems
+        const response = {
+            order_id: orderItems.rows[0].order_id,
+            total_products: orderItems.rows[0].total_products,
+            total_amount: orderItems.rows[0].total_amount,
+            items: orderItems.rows.map(r => ({
+                order_item_id: r.order_item_id,
+                product_id: r.product_id,
+                label: r.label,
+                selling_price: r.selling_price,
+                product_url: r.product_url,
+                quantity: r.quantity,
+                seller_name: r.seller_name
+         }))
+        }
         
         return res.status(200).send({
             success : true,
-            message : 'orderItem updated successfully',
-            orderItems : orderItems.rows
+            message : 'Get user carts items successfully',
+            orderItems : response
         })
         
     } catch(err : unknown){

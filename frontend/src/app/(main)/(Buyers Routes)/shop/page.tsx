@@ -18,12 +18,26 @@ import { getAllOrderItems } from '@/services/operations/buyer/orderAndCart'
 async function page() {
 
   const cookieStored = await cookies()
-  const products = await buyersShopProducts(cookieStored);
+  // const products = await buyersShopProducts(cookieStored);
 
-  const AllOrderItems = await getAllOrderItems(cookieStored);
-  console.log(AllOrderItems)
+  // const AllOrderItems = await getAllOrderItems(cookieStored);
+   let products: any[] = [];
+   let AllOrderItems: any = { items: [] };
+  // console.log(AllOrderItems)
+
+  try {
+    products = await buyersShopProducts(cookieStored);
+  } catch (error) {
+    console.log("Failed to fetch products", error);
+  }
 
 
+   try {
+    AllOrderItems = await getAllOrderItems(cookieStored);
+  } catch (error) {
+    console.error("Failed to fetch cart items", error);
+    AllOrderItems = { items: [] }; // fallback
+  }
 
 
   return (
@@ -56,9 +70,11 @@ async function page() {
                 products.map((p : any) => {
                     const {id , product_url , label , selling_price} = p
 
-                     const cartItem = AllOrderItems.find(
+                     const cartItem = AllOrderItems.items.find(
                         (item: any) => item.product_id === id
                      );
+
+                     console.log(cartItem)
 
                     return (
                       <Link key={id} href={`/shop/${id}`} scroll={true}>
@@ -71,7 +87,7 @@ async function page() {
                             rating={4.1}
                             reviews={13321}
                             cartQuantity={cartItem?.quantity ?? 0}
-                            orderItemID={cartItem?.id}
+                            orderItemID={cartItem?.order_item_id}
                           />
                       </Link>
                     )

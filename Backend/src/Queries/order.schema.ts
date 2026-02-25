@@ -20,6 +20,14 @@ export const DecreaseOrdersQuery = `
 `
 
 export const checkorderCreatedQuery = `
-    SELECT * FROM orders
-    WHERE buyers_id = $1 AND status = 'cart';
+    SELECT *
+    FROM orders
+    WHERE buyers_id = $1
+    AND status IN ('cart', 'pending_payment');
+`
+
+export const updateOrderStatusQuery = `
+    UPDATE orders
+    SET status = $1
+    WHERE id = $2 AND buyers_id = $3;
 `

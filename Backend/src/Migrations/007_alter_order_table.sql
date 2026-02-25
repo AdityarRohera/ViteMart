@@ -13,3 +13,15 @@ ALTER TABLE orders
 ALTER COLUMN total_amount DROP NOT NULL;
 
 ALTER TABLE orders ALTER COLUMN total_amount SET DEFAULT 0;
+
+
+    -- New orders status type
+CREATE TYPE order_type AS ENUM (
+    'cart',
+    'pending_payment',
+    'paid',
+    'processing',
+    'shipped',
+    'delivered',
+    'cancelled'
+); 

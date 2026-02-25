@@ -42,13 +42,15 @@ export const newOrderItem = async({product_id , order_id , quantity} : any) => {
     }
 }
 
-export const getAllOrderItems = async(cookieStored : any) => {
+export const getAllOrderItems = async(cookieStored ?  : any) => {
     try{    
 
            console.log("Inside getting order items");
 
-           const res = await axios.get(`${BASE_URL}${BUYERS_ORDER_ENDPOINT.GETALLORDERITEMS}` , {headers : {cookie : cookieStored}})
-           console.log(res);
+           const res = cookieStored ? await axios.get(`${BASE_URL}${BUYERS_ORDER_ENDPOINT.GETALLORDERITEMS}` , {headers : {cookie : cookieStored}})
+                       : await axios.get(`${BASE_URL}${BUYERS_ORDER_ENDPOINT.GETALLORDERITEMS}` , {withCredentials : true})
+
+           console.log(res)
 
            if(res.data.success){
                 return res.data.orderItems
@@ -58,7 +60,7 @@ export const getAllOrderItems = async(cookieStored : any) => {
 
     } catch(err : unknown){
         console.log("Error comes in getting all order items -> " , err);
-        return null
+        return []
     }
 }
 

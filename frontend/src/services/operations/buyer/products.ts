@@ -17,7 +17,7 @@ export const buyersShopProducts = async(cookieStored : any) => {
 
     } catch(err : unknown){
         console.log("Error comes in getting all products -> " , err);
-        return null
+        return []
     }
 }
 

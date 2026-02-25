@@ -9,12 +9,17 @@ cloudinaryConnect();
 const app = express()
 const port = process.env.PORT || 3000; 
 
-app.use(express.json());
 app.use(cors({
   origin: "http://localhost:3000", // frontend URL
   credentials: true
 }));
 app.use(cookieParser());
+
+// payment route
+import paymentRoute from './Routes/Buyers/PaymentRoute.js';
+app.use('/api/v1' , paymentRoute);
+
+app.use(express.json());
 
 import userRoute from './Routes/UserRoute.js';
 app.use('/api/v1' , userRoute);
