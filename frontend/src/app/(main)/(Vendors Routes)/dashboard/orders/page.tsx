@@ -5,10 +5,13 @@ import { useEffect , useState } from 'react'
 import { Input } from '@/components/ui/input'
 import IncomingOrderCard from '@/components/Vendor/orders/IncomingOrderCart'
 import { getIncomingOrders } from '@/services/operations/vendor/orders';
+import OrderCard from '@/components/Vendor/orders/IncomingOrderCart';
+import OrderCardStructure from '@/components/Vendor/orders/IncomingOrderCardStructure';
 
 export default function Page() {
 
     const [incomingOrders , setIncomingOrders] = useState([]);
+    const [viewType, setViewType] = useState<'card' | 'row'>('card');
     console.log(incomingOrders)
     const [loading , setLoading] = useState(true);
 
@@ -77,18 +80,62 @@ className="h-11"
 <option>Delivered</option>
 </select>
 
+<div className="flex border rounded-lg shadow">
+
+  <button
+    onClick={() => setViewType('card')}
+    className={`px-4 py-2 text-sm ${
+      viewType === 'card'
+        ? 'bg-blue-600 text-white'
+        : 'bg-white text-gray-600'
+    }`}
+  >
+    ⬜⬜
+  </button>
+
+  <button
+    onClick={() => setViewType('row')}
+    className={`px-4 py-2 text-sm ${
+      viewType === 'row'
+        ? 'bg-blue-600 text-white'
+        : 'bg-white text-gray-600'
+    }`}
+  >
+     ☰
+  </button>
+
 </div>
+
+</div>
+
+
+{/* 👇 VIEW TOGGLE HERE */}
+{
+    viewType === 'card' ? 
+    (
+        <div className="flex flex-wrap gap-5">
+
+            {incomingOrders.map((order,index)=>(
+            <OrderCardStructure order={order} key={index}/>
+            ))}
+
+        </div>
+        
+    ) : 
+    (
+        <div className="flex flex-col gap-5">
+
+            {incomingOrders.map((order,index)=>(
+            <IncomingOrderCard order={order} key={index}/>
+            ))}
+
+        </div>
+    )
+}
+
 
 
 {/* Orders */}
-
-<div className="flex flex-col gap-5">
-
-{incomingOrders.map((order,index)=>(
-<IncomingOrderCard order={order} key={index}/>
-))}
-
-</div>
 
 </div>
 

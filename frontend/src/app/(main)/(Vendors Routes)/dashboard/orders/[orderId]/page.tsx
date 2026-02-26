@@ -25,7 +25,7 @@ export default async function Page({
     return <div>Failed to fetch order info </div>
   }
 
-  const {buyer_id , name , email , order_id , created_at , total_order_price , items} = singleOrder
+  const {buyer_id , name , email , order_id , created_at , total_order_price , method , items} = singleOrder
 
 
   return (
@@ -53,7 +53,7 @@ export default async function Page({
       {/* Top Section */}
       <div className="grid grid-cols-2 gap-6">
         <DeliveryInfoCard name={name} email={email} date={created_at}/>
-        <PaymentInfoCard total={total_order_price} />
+        <PaymentInfoCard total={total_order_price} method={method} />
       </div>
 
       {/* Products */}

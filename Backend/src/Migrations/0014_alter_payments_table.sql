@@ -1,0 +1,4 @@
+
+
+ALTER TABLE payments
+ADD COLUMN method VARCHAR(50);

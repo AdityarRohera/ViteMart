@@ -1,7 +1,7 @@
 
 import type { Request , Response } from "express";
 import type { AuthenticatedRequest } from "../../Middlewares/auth.js";
-import { getIncomingOrders, getSingleIncomingOrder, updateOrderStatus } from "../../Services/vendors/incomingOrders.service.js";
+import { getIncomingOrders, getRecentOrders, getSingleIncomingOrder, updateOrderStatus } from "../../Services/vendors/incomingOrders.service.js";
 
 export const getAllIncomingOrdersHandler = async(req : Request , res : Response) => {
     try{
@@ -92,6 +92,36 @@ export const updateOrderStatusHandler = async(req : Request , res : Response) =>
         res.status(500).send({
             status : false,
             message : "Something wrong in update order status",
+            error : errmessage
+        })
+    }
+}
+
+export const recentOrderHandler = async(req : Request , res : Response) => {
+    try{
+         console.log("Inside getting recent order handler ");
+         const vendor_id = (req as AuthenticatedRequest).user.userId;
+        
+         const result = await getRecentOrders(vendor_id);
+
+        return res.status(200).send({
+            success : true,
+            message : 'fetched recent order successfully',
+            result : result.rows
+        })
+        
+    } catch(err : unknown){
+        console.log("Error comes in getting recent orders -> " , err);
+        let errmessage;
+        if(err instanceof Error){
+            errmessage = err.message
+        } else if(typeof err === "string"){
+            errmessage = err
+        }
+
+        res.status(500).send({
+            status : false,
+            message : "Something wrong in getting recent orders",
             error : errmessage
         })
     }

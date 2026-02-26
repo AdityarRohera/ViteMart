@@ -61,3 +61,23 @@ export const updateOrderStatus = async(status : string ,order_id : string) => {
         return null
     }
 }
+
+export const getRecentOrders = async(cookieStored : any) => {
+    try{    
+
+           console.log("Inside getting single incoming order");
+
+           const res = await axios.get(`${BASE_URL}${VENDORS_ORDER_ENDPOINT.RECENTORDERS}` ,{headers : {cookie : cookieStored}})
+           console.log(res);
+
+           if(res.data.success){
+                return res.data.result
+           }
+           
+            return [];
+
+    } catch(err : unknown){
+        console.log("Error comes in getting single incoming order -> " , err);
+        return []
+    }
+}

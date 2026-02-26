@@ -166,7 +166,46 @@ export const checkItemAddedOrNotQuery = `
     AND o.status IN ('paid' , 'shipped' , 'delivered')
 
     GROUP BY 
-    o.id, o.created_at, b.id, b.name, b.email;
+    o.id, o.created_at, b.id, b.name, b.email
+    ORDER BY o.updated_at DESC;
+    `
+
+    export const recentIncomingOrderQuery = `
+    SELECT 
+    o.id AS order_id,
+    o.created_at,
+    o.status,
+    sum(p.selling_price * oi.quantity) As total_order_price,
+
+    b.id AS buyer_id,
+    b.name,
+    b.email,
+
+    json_agg(
+        json_build_object(
+            'product_id', p.id,
+            'product_name', p.label,
+            'price', p.selling_price,
+            'quantity', oi.quantity,
+            'image' , p.product_url,
+            'order_id' , o.id
+        )
+    ) AS items
+
+    FROM orders o
+
+    JOIN orderitems oi ON oi.order_id = o.id
+    JOIN products p ON p.id = oi.product_id
+    JOIN users b ON b.id = o.buyers_id
+
+    WHERE 
+    p.vendor_id = $1
+    AND o.status IN ('paid' , 'shipped')
+
+    GROUP BY 
+    o.id, o.created_at, b.id, b.name, b.email
+    ORDER BY o.updated_at DESC
+    LIMIT 6;
     `
 
   export const getSingleIncomingOrderQuery = `
@@ -179,6 +218,8 @@ export const checkItemAddedOrNotQuery = `
     b.id AS buyer_id,
     b.name,
     b.email,
+    
+    ps.method, 
 
     json_agg(
         json_build_object(
@@ -197,11 +238,12 @@ export const checkItemAddedOrNotQuery = `
     JOIN orderitems oi ON oi.order_id = o.id
     JOIN products p ON p.id = oi.product_id
     JOIN users b ON b.id = o.buyers_id
+    JOIN payments ps on ps.order_id = o.id
 
     WHERE 
     p.vendor_id = $1 AND o.id = $2
     AND o.status IN ('paid' , 'shipped' , 'delivered')
 
     GROUP BY 
-    o.id, o.created_at, o.status, b.id, b.name, b.email;
+    o.id, o.created_at, ps.method , o.status, b.id, b.name, b.email;
     `

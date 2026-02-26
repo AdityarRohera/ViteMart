@@ -49,7 +49,8 @@ export const PAYMENTS_ENDPOINTS = {
 export const VENDORS_ORDER_ENDPOINT = {
     INCOMINGORDERS : '/incoming-orders',
     SINGLEORDER : '/incoming-order',
-    UPDATESTATUS : '/update-status'
+    UPDATESTATUS : '/update-status',
+    RECENTORDERS : '/recent-orders'
 }
 
 // export const PAYMENT_API_ENDPOINT = {

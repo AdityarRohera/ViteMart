@@ -1,6 +1,6 @@
 import pool from "../../Config/dbConnect.js"
 import { updateOrderStatusQ } from "../../Queries/order.schema.js"
-import { getIncomingOrdersQuery, getSingleIncomingOrderQuery } from "../../Queries/orderItem.schema.js"
+import { getIncomingOrdersQuery, getSingleIncomingOrderQuery, recentIncomingOrderQuery } from "../../Queries/orderItem.schema.js"
 
 
 export const getIncomingOrders = (vendor_id : string) => {
@@ -13,4 +13,8 @@ export const getSingleIncomingOrder = (vendor_id : any , order_id : any) => {
 
 export const updateOrderStatus = ({status , order_id} : any) => {
     return pool.query(updateOrderStatusQ , [status , order_id])
+}
+
+export const getRecentOrders = (vendor_id : any) => {
+    return pool.query(recentIncomingOrderQuery , [vendor_id]);
 }

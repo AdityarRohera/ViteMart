@@ -1,6 +1,6 @@
 
 
-export default function PaymentInfoCard({total} : any) {
+export default function PaymentInfoCard({total , method} : any) {
   return (
     <div className="bg-white border rounded-xl shadow-sm p-6 flex flex-col gap-6">
 
@@ -36,7 +36,7 @@ export default function PaymentInfoCard({total} : any) {
         </p>
 
         <span className="border px-3 py-1 rounded-md text-sm bg-gray-50">
-          PayPal
+          {method ? method : 'Not Defined'}
         </span>
 
       </div>
