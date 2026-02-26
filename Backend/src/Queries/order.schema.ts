@@ -31,3 +31,8 @@ export const updateOrderStatusQuery = `
     SET status = $1
     WHERE id = $2 AND buyers_id = $3;
 `
+
+export const updateOrderStatusQ = `
+    UPDATE orders
+    SET status = $1 WHERE id = $2;
+`

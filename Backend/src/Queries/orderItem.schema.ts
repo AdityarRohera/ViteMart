@@ -114,21 +114,94 @@ export const checkItemAddedOrNotQuery = `
 
     // vendor get incmoing orders items 
 
+    // export const getIncomingOrdersQuery = `
+    //     SELECT 
+    //     oi.id,
+    //     oi.quantity,
+    //     oi.added_at as Date,
+    //     p.selling_price,
+    //     p.id AS product_id,
+    //     p.label AS product_name,
+    //     b.id AS buyer_id,
+    //     b.name,
+    //     b.email
+    //     FROM orderitems oi
+    //     JOIN orders o ON o.id = oi.order_id
+    //     JOIN products p ON p.id = oi.product_id
+    //     JOIN users b ON b.id = o.buyers_id
+    //     WHERE p.vendor_id = $1 AND oi.order_id = $2
+    //     AND o.status = 'paid';
+    // `
+
     export const getIncomingOrdersQuery = `
-        SELECT 
-        oi.id,
-        oi.quantity,
-        oi.added_at as Date,
-        p.selling_price,
-        p.id AS product_id,
-        p.label AS product_name,
-        b.id AS buyer_id,
-        b.name,
-        b.email
-        FROM orderitems oi
-        JOIN orders o ON o.id = oi.order_id
-        JOIN products p ON p.id = oi.product_id
-        JOIN users b ON b.id = o.buyers_id
-        WHERE p.vendor_id = $1
-        AND o.status = 'paid';
+    SELECT 
+    o.id AS order_id,
+    o.created_at,
+    o.status,
+    sum(p.selling_price * oi.quantity) As total_order_price,
+
+    b.id AS buyer_id,
+    b.name,
+    b.email,
+
+    json_agg(
+        json_build_object(
+            'product_id', p.id,
+            'product_name', p.label,
+            'price', p.selling_price,
+            'quantity', oi.quantity,
+            'image' , p.product_url,
+            'order_id' , o.id
+        )
+    ) AS items
+
+    FROM orders o
+
+    JOIN orderitems oi ON oi.order_id = o.id
+    JOIN products p ON p.id = oi.product_id
+    JOIN users b ON b.id = o.buyers_id
+
+    WHERE 
+    p.vendor_id = $1
+    AND o.status IN ('paid' , 'shipped' , 'delivered')
+
+    GROUP BY 
+    o.id, o.created_at, b.id, b.name, b.email;
+    `
+
+  export const getSingleIncomingOrderQuery = `
+    SELECT 
+    o.id AS order_id,
+    o.created_at,
+    o.status,
+    sum(p.selling_price * oi.quantity) As total_order_price,
+
+    b.id AS buyer_id,
+    b.name,
+    b.email,
+
+    json_agg(
+        json_build_object(
+            'product_id', p.id,
+            'product_name', p.label,
+            'buying_price' , p.buying_price,
+            'price', p.selling_price,
+            'quantity', oi.quantity,
+            'image' , p.product_url,
+            'order_id' , o.id
+        )
+    ) AS items
+
+    FROM orders o
+
+    JOIN orderitems oi ON oi.order_id = o.id
+    JOIN products p ON p.id = oi.product_id
+    JOIN users b ON b.id = o.buyers_id
+
+    WHERE 
+    p.vendor_id = $1 AND o.id = $2
+    AND o.status IN ('paid' , 'shipped' , 'delivered')
+
+    GROUP BY 
+    o.id, o.created_at, o.status, b.id, b.name, b.email;
     `
