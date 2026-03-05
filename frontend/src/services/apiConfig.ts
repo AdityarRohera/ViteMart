@@ -20,7 +20,9 @@ export const COMMON = {
 export const VENDORS_PRODUCT_ENDPOINT = {
     NEWPRODUCT : '/newproduct',
     GETpRODUCT : '/product',
-    GETALLPRODUCTS : '/allProducts'
+    GETALLPRODUCTS : '/allProducts',
+    TOPSELLINGPRODUCTS : '/products/top-selling',
+    VIEWPRODUCT : '/view-product'
 }
 
 export const VENDORS_Manage_Inventory_ENDPOINT = {
@@ -51,6 +53,10 @@ export const VENDORS_ORDER_ENDPOINT = {
     SINGLEORDER : '/incoming-order',
     UPDATESTATUS : '/update-status',
     RECENTORDERS : '/recent-orders'
+}
+
+export const VENDOR_DASHBOARD_ENDPOINT = {
+    INFO : '/vendor/dashboard'
 }
 
 // export const PAYMENT_API_ENDPOINT = {

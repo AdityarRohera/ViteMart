@@ -103,7 +103,7 @@ export const getAllProducts = async() => {
 
            console.log("Inside getting all products")
            const res = await axios.get(`${BASE_URL}${VENDORS_PRODUCT_ENDPOINT.GETALLPRODUCTS}` , {withCredentials : true})
-           console.log(res);
+        //    console.log(res);
 
            if(res.data.success){
                 return res.data.products
@@ -113,6 +113,46 @@ export const getAllProducts = async() => {
 
     } catch(err : unknown){
         console.log("Error comes in getting all products -> " , err);
+        return null
+    }
+}
+
+export const getTopSellingProducts = async(cookieStored? : any) => {
+    try{    
+
+           console.log("Inside getting top selling products");
+
+           const res = cookieStored ? await axios.get(`${BASE_URL}${VENDORS_PRODUCT_ENDPOINT.TOPSELLINGPRODUCTS}` ,{headers : {cookie : cookieStored}}) : await axios.get(`${BASE_URL}${VENDORS_PRODUCT_ENDPOINT.TOPSELLINGPRODUCTS}` , {withCredentials : true})
+        //    console.log(res);
+
+           if(res.data.success){
+                return res.data.result
+           }
+           
+            return [];
+
+    } catch(err : unknown){
+        console.log("Error comes in getting single incoming order -> " , err);
+        return []
+    }
+}
+
+export const viewFullProduct = async(product_id : string) => {
+    try{    
+
+           console.log("Inside getting top selling products");
+
+           const res = await axios.get(`${BASE_URL}${VENDORS_PRODUCT_ENDPOINT.VIEWPRODUCT}/${product_id}` , {withCredentials : true})
+           console.log(res);
+
+           if(res.data.success){
+                return res.data.result
+           }
+           
+            return null;
+
+    } catch(err : unknown){
+        console.log("Error comes in getting single incoming order -> " , err);
         return null
     }
 }

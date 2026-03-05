@@ -68,7 +68,7 @@ export const getRecentOrders = async(cookieStored : any) => {
            console.log("Inside getting single incoming order");
 
            const res = await axios.get(`${BASE_URL}${VENDORS_ORDER_ENDPOINT.RECENTORDERS}` ,{headers : {cookie : cookieStored}})
-           console.log(res);
+        //    console.log(res);
 
            if(res.data.success){
                 return res.data.result

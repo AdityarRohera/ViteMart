@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 function VendorPublishedProduct({
   product_url,
@@ -10,6 +11,8 @@ function VendorPublishedProduct({
   buying_price,
   selling_price,
   status,
+  id,
+  topSelling
 }: any) {
 
 
@@ -23,7 +26,7 @@ function VendorPublishedProduct({
   return (
     <div className="bg-white border rounded-xl p-7 
     flex items-center justify-between 
-    hover:shadow-md transition shadow">
+    hover:shadow-md transition shadow relative h-50">
 
       {/* LEFT SIDE */}
       <div className="flex items-center gap-6 flex-1">
@@ -79,17 +82,22 @@ function VendorPublishedProduct({
 
         {/* Buttons */}
         <div className="flex gap-3">
-          <button className="bg-blue-600 hover:bg-blue-700 
+          <Link href={`/dashboard/product/edit/${id}`} onClick={(e) => e.stopPropagation()} className="bg-blue-600 hover:bg-blue-700 
           text-white px-5 py-2 rounded-md transition">
             Edit
-          </button>
+          </Link>
 
-          <button className="bg-red-500 hover:bg-red-600 
+          <Link href={'/dashboard/product'} onClick={(e) => e.stopPropagation()} className="bg-red-500 hover:bg-red-600 
           text-white px-5 py-2 rounded-md transition">
             Delete
-          </button>
+          </Link>
         </div>
       </div>
+
+
+      {
+        topSelling && <div className="border border-green-100 shadow px-3 text-md font-medium rounded-2xl bg-green-600 text-white absolute top-2">Top Selling</div>
+      }
     </div>
   );
 }

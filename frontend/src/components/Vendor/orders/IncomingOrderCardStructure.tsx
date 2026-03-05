@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function OrderCardStructure({order} : any) {
-  console.log(order)
+  // console.log(order)
 
 const {order_id , total_order_price , buyer_id , name , email , created_at , items , status} = order;
 

@@ -13,6 +13,7 @@ import { cookies } from 'next/headers'
 import { buyersShopProducts } from '@/services/operations/buyer/products'
 import Link from 'next/link'
 import { getAllOrderItems } from '@/services/operations/buyer/orderAndCart'
+import ViewCart from '@/components/Buyers/product/viewCart'
 
 
 async function page() {
@@ -23,7 +24,6 @@ async function page() {
   // const AllOrderItems = await getAllOrderItems(cookieStored);
    let products: any[] = [];
    let AllOrderItems: any = { items: [] };
-  // console.log(AllOrderItems)
 
   try {
     products = await buyersShopProducts(cookieStored);
@@ -34,14 +34,18 @@ async function page() {
 
    try {
     AllOrderItems = await getAllOrderItems(cookieStored);
+    console.log(AllOrderItems)
+
   } catch (error) {
     console.error("Failed to fetch cart items", error);
     AllOrderItems = { items: [] }; // fallback
   }
 
+  console.log(AllOrderItems.total_products)
+
 
   return (
-    <div className='flex flex-col gap-5 p-10'>
+    <div className='flex flex-col gap-5 p-10 relative'>
 
         <div className='flex flex-col gap-10 px-5'>
             <h1 className='text-4xl font-bold opacity-55'>SHOPS</h1>
@@ -111,6 +115,10 @@ async function page() {
             }
       </div>
       </div>
+      
+      {/* <div className='absolute left-50 bottom-100'>
+        <ViewCart cartQuantity={AllOrderItems.total_products}/>
+      </div> */}
     </div>
   )
 }
