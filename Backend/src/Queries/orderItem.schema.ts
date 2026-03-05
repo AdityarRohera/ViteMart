@@ -247,3 +247,20 @@ export const checkItemAddedOrNotQuery = `
     GROUP BY 
     o.id, o.created_at, ps.method , o.status, b.id, b.name, b.email;
     `
+
+export const topSellingProductQuery = `
+    SELECT 
+        P.id,
+        p.label,
+        p.product_url,
+        p.selling_price,
+        sum(oi.quantity) AS total_sold,
+        sum((p.selling_price - p.buying_price) * oi.quantity) AS total_revenue
+    FROM orderitems oi
+    JOIN orders o ON o.id = oi.order_id
+    JOIN products p ON p.id = oi.product_id
+    WHERE p.vendor_id = $1 AND o.status IN ('paid' , 'shipped' , 'delivered')
+    GROUP BY p.id
+    ORDER BY total_sold DESC
+    LIMIT 10;
+`

@@ -36,3 +36,33 @@ export const updateOrderStatusQ = `
     UPDATE orders
     SET status = $1 WHERE id = $2;
 `
+
+// vendor one day earning's 
+export const oneDayEarningQuery = `
+    SELECT  COALESCE(SUM(p.selling_price * oi.quantity),0) AS todays_earning FROM orders o
+    JOIN orderitems oi ON oi.order_id = o.id
+    JOIN products p ON  p.id = oi.product_id
+    WHERE p.vendor_id = $1 AND o.status IN ('paid' , 'shipped' , 'delivered')
+    AND  o.updated_at >= CURRENT_DATE
+    AND o.updated_at < CURRENT_DATE + INTERVAL '1 day';
+`
+
+// vendor total earning's
+export const totalEarningQuery = `
+    SELECT  COALESCE(SUM(p.selling_price * oi.quantity),0) AS total_earning FROM orders o
+    JOIN orderitems oi ON oi.order_id = o.id
+    JOIN products p ON  p.id = oi.product_id
+    WHERE p.vendor_id = $1 AND o.status IN ('paid' , 'shipped' , 'delivered');
+`
+
+// vendor total incoming orders
+export const totalIncomingOrdersQuery = `
+    SELECT count(DISTINCT o.id) AS IncomingOrders FROM orders o
+
+    JOIN orderitems oi ON oi.order_id = o.id
+    JOIN products p ON p.id = oi.product_id
+
+    WHERE 
+    p.vendor_id = $1
+    AND o.status IN ('paid' , 'shipped')
+`

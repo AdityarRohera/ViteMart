@@ -29,10 +29,12 @@ import vendorProductRoute from './Routes/Vendors/ProductRoute.js';
 import vendorInventoryRoute from './Routes/Vendors/InventoryRoute.js';
 import vendorsOrdersRoute from './Routes/Vendors/IncomingOrdersRoute.js';
 import catogoryRoute from './Routes/Vendors/CatogoriesRoute.js';
+import dashboardRoute from './Routes/Vendors/DashboardRoute.js';
 app.use('/api/v1' , vendorProductRoute)
 app.use('/api/v1' , vendorInventoryRoute);
 app.use('/api/v1' , vendorsOrdersRoute)
 app.use('/api/v1' , catogoryRoute)
+app.use('/api/v1' , dashboardRoute)
 
 // common routes
 import cloudinaryUploadRoute from './Routes/common/CloudinaryUploadRoute.js';

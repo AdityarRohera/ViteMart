@@ -1,7 +1,8 @@
 
 import pool from "../../Config/dbConnect.js";
+import { topSellingProductQuery } from "../../Queries/orderItem.schema.js";
 
-import { getAllProductsQuery, getProductQuery, newProductQuery, updateProductQuery, updateProductStatusQuery } from "../../Queries/product.schema.js";
+import { getAllProductsQuery, getProductQuery, getVendorProductQuery, newProductQuery, updateProductQuery, updateProductStatusQuery } from "../../Queries/product.schema.js";
 
 export const newProduct = ({label , description ,  buying_price , selling_price , category_id , product_url , vendor_id} : any) => {
     return pool.query(newProductQuery , [label , description ,  buying_price , selling_price , category_id||null , product_url , vendor_id]);
@@ -22,4 +23,12 @@ export const getProduct = (productId : any) => {
 
 export const getAllProducts = (vendor_id : any) => {
     return pool.query(getAllProductsQuery , [vendor_id]);
+}
+
+export const getTopSellingProducts = (vendor_id : string) => {
+    return pool.query(topSellingProductQuery , [vendor_id]);
+}
+
+export const getVendorSingleProduct = (vendor_id : any) => {
+    return pool.query(getVendorProductQuery , [vendor_id])
 }

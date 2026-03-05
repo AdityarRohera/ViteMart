@@ -80,3 +80,17 @@ FROM products P
 JOIN categories C ON C.id = P.category_id
 WHERE P.id = $1;
 `;
+
+
+export const getVendorProductQuery = `
+  SELECT p.id , p.label , p.buying_price , p.selling_price , p.description , p.status , p.product_url AS image , p.created_at ,  c.name AS category , i.quantity_available , i.location  FROM products p
+  JOIN categories c ON c.id = p.category_id
+  JOIN inventory i ON i.product_id = $1
+  WHERE p.id = $1;
+`
+
+// total vendors products count
+export const getTotalProductCount = `
+  SELECT count(id) as TotalCount FROM products
+  WHERE vendor_id = $1;
+`

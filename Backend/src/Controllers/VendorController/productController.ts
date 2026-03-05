@@ -1,7 +1,7 @@
 import type { Request , Response } from "express";
 import type { AuthenticatedRequest } from "../../Middlewares/auth.js";
 
-import { getAllProducts, getProduct, newProduct, updateProduct } from "../../Services/vendors/product.service.js";
+import { getAllProducts, getProduct, getTopSellingProducts, getVendorSingleProduct, newProduct, updateProduct } from "../../Services/vendors/product.service.js";
 
 export const newProductHandler = async (req: Request, res: Response) => {
   try {
@@ -150,6 +150,78 @@ export const fetchAllProductsHandler = async(req : Request , res : Response) => 
         res.status(500).send({
             status : false,
             message : "Something wrong in getting all products",
+            error : errmessage
+        })
+    }
+}
+
+
+export const topSellingProductHandler = async(req : Request , res : Response) => {
+    try{
+        console.log("Inside Getting top selling products");
+
+        const vendor_id = (req as AuthenticatedRequest).user.userId;
+
+        const result = await getTopSellingProducts(vendor_id);
+        
+        return res.status(200).send({
+            success : true,
+            message : 'Get Top selling products successfully',
+            result : result.rows
+        })
+        
+    } catch(err : unknown){
+        console.log("Error comes in getting top selling products-> " , err);
+        let errmessage;
+        if(err instanceof Error){
+            errmessage = err.message
+        } else if(typeof err === "string"){
+            errmessage = err
+        }
+
+        res.status(500).send({
+            status : false,
+            message : "Something wrong in getting top selling products",
+            error : errmessage
+        })
+    }
+}
+
+
+export const getSingleProductHandler = async(req : Request , res : Response) => {
+    try{
+        console.log("Inside view full vendors product");
+
+        const vendor_id = (req as AuthenticatedRequest).user.userId;
+        const {productId} = req.params
+
+        if(!productId){
+          return res.status(400).send({
+            success : false,
+            message : "Invalid product id"
+          })
+        }
+
+        const result = await getVendorSingleProduct(productId);
+        
+        return res.status(200).send({
+            success : true,
+            message : 'Get vendor product successfully',
+            result : result.rows[0]
+        })
+        
+    } catch(err : unknown){
+        console.log("Error comes in  view full vendors product-> " , err);
+        let errmessage;
+        if(err instanceof Error){
+            errmessage = err.message
+        } else if(typeof err === "string"){
+            errmessage = err
+        }
+
+        res.status(500).send({
+            status : false,
+            message : "Something wrong in view full vendors product",
             error : errmessage
         })
     }
