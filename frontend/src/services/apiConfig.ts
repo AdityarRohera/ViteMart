@@ -34,14 +34,17 @@ export const VENDORS_Manage_Inventory_ENDPOINT = {
 // buyer's Endpoinds 
 export const BUYERS_PRODUCT_ENDPOINT = {
     ALLPRODUCTS : '/buyer/products',
-    SINGLEPRODUCT : '/buyer/singleProduct'
+    SINGLEPRODUCT : '/buyer/singleProduct',
+    CATEGORYPRODUCTS : '/buyer/products',
+    RECOMMENDATIONPRODUCTS : '/buyer/recommendation-products'
 }
 
 export const BUYERS_ORDER_ENDPOINT = {
     CREATEORDER : `/createorder`,
     CREATEORDERITEM : '/neworder_item',
     GETALLORDERITEMS : '/order/items',
-    UPDATEORDERITEM : '/updateorder_item'
+    UPDATEORDERITEM : '/updateorder_item',
+    RECENTORDERS : '/buyers/recent-orders'
 }
 
 export const PAYMENTS_ENDPOINTS = {

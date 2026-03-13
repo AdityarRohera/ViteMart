@@ -66,3 +66,21 @@ export const totalIncomingOrdersQuery = `
     p.vendor_id = $1
     AND o.status IN ('paid' , 'shipped')
 `
+
+// getting buyer's recent orders for dashboard 
+export const buyersRecentOrdersQuery = `
+    SELECT  
+            OI.id,
+            O.id as orderId,
+            P.label as item,
+            S.name as seller,
+            OI.quantity,
+            (P.selling_price * OI.quantity) as amount
+    FROM orders O
+    JOIN orderitems OI ON OI.order_id = O.id
+    JOIN products P ON P.id = OI.product_id
+    JOIN users S on S.id = P.vendor_id
+    WHERE O.buyers_id = $1 AND O.status IN ('paid' , 'shipped' , 'delivered' , 'cancelled')
+    ORDER BY O.created_at DESC
+    LIMIT 10;
+`

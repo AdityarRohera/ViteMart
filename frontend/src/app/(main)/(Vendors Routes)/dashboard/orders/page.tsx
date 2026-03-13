@@ -113,7 +113,7 @@ className="h-11"
 {
     viewType === 'card' ? 
     (
-        <div className="flex flex-wrap gap-5">
+        <div className="flex flex-wrap gap-10">
 
             {incomingOrders.map((order,index)=>(
             <OrderCardStructure order={order} key={index}/>

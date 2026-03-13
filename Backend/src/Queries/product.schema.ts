@@ -94,3 +94,39 @@ export const getTotalProductCount = `
   SELECT count(id) as TotalCount FROM products
   WHERE vendor_id = $1;
 `
+
+// get all category products
+export const categoryProductsQuery = `
+  SELECT 
+       P.id,
+       P.label,
+       P.selling_price,
+       C.name AS category_name,
+       P.product_url
+FROM products P
+JOIN categories C ON C.id = P.category_id
+WHERE P.status = 'Published' AND C.id = $1;
+`
+
+export const recommendationProductsQuery = `
+  SELECT 
+          id,
+          label,
+          description,
+          selling_price,
+          product_url
+  FROM products
+  WHERE category_id IN (
+      SELECT C.id
+      FROM orders O
+      JOIN orderitems OI ON OI.order_id = O.id
+      JOIN products P ON P.id = OI.product_id
+      JOIN categories C ON C.id = P.category_id
+      WHERE O.buyers_id = $1
+      GROUP BY C.id
+      ORDER BY SUM(OI.quantity) DESC
+      LIMIT 3
+  )
+  ORDER BY created_at DESC
+  LIMIT 12;
+`

@@ -1,25 +1,41 @@
 'use client'
 
 import Image from "next/image";
+import Link from "next/link";
 
-function CategoryCard({ icon, categoryName }: any) {
+function CategoryCard({ name , category_url , id }: any) {
+  // console.log(`${name}_${id}`)
   return (
-    <div className="flex flex-col items-center gap-3 
-      p-5 bg-white rounded-xl shadow-md 
-      hover:shadow-xl hover:scale-105 
-      transition cursor-pointer border border-gray-100 w-70">
+    <Link href={`shop/category/${name}_${id}`}>
+    <div className="
+      relative w-64 h-40 
+      rounded-xl overflow-hidden 
+      shadow-md hover:shadow-2xl 
+      hover:scale-105 
+      transition duration-300 
+      cursor-pointer group
+    ">
 
+      {/* Background Image */}
       <Image
-        src={icon}
-        alt={categoryName}
-        width={60}
-        height={60}
+        src={category_url}
+        alt={name}
+        fill
+        className="object-cover group-hover:scale-110 transition duration-500"
       />
 
-      <h3 className="font-semibold text-gray-700">
-        {categoryName}
-      </h3>
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition"/>
+
+      {/* Category Name */}
+      <div className="absolute bottom-3 left-3">
+        <h3 className="text-white text-lg font-semibold tracking-wide">
+          {name}
+        </h3>
+      </div>
+
     </div>
+    </Link>
   );
 }
 

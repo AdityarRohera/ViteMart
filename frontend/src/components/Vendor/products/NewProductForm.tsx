@@ -19,7 +19,6 @@ function NewProductForm({draft , productId} : any) {
         category_id: "",
         buying_price: "",
         selling_price: "",
-        quantity: "",
         product_url: "",
      });
 
@@ -119,7 +118,6 @@ function NewProductForm({draft , productId} : any) {
             category_id: data.category_id || "",
             buying_price: data.buying_price || "",
             selling_price: data.selling_price || "",
-            quantity: data.quantity || "",
             product_url: data.product_url || "",
           });
 
@@ -210,12 +208,12 @@ function NewProductForm({draft , productId} : any) {
                 <Input type="number" className="h-12 shadow" placeholder="$ Buying Price" name="buying_price" value={productForm.buying_price} onChange={changeHandler} />
               </div>
 
-              <div className="w-full">
+              {/* <div className="w-full">
                 <h2 className="text-lg font-medium mb-2 opacity-80">
                   Stock Quantity
                 </h2>
                 <Input type="number" className="h-12 shadow" placeholder="0" name="quantity" value={productForm.quantity} onChange={changeHandler} />
-              </div>
+              </div> */}
 
             </div>
 

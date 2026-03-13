@@ -50,7 +50,7 @@ export const getAllOrderItems = async(cookieStored ?  : any) => {
            const res = cookieStored ? await axios.get(`${BASE_URL}${BUYERS_ORDER_ENDPOINT.GETALLORDERITEMS}` , {headers : {cookie : cookieStored}})
                        : await axios.get(`${BASE_URL}${BUYERS_ORDER_ENDPOINT.GETALLORDERITEMS}` , {withCredentials : true})
 
-           console.log(res)
+        //    console.log(res)
 
            if(res.data.success){
                 return res.data.orderItems
@@ -101,5 +101,26 @@ export const DecreaseCartQuantity = async({quantity , orderItem_id, status} : an
     } catch(err : unknown){
         console.log("Error comes in Decrease order items -> " , err);
         return null
+    }
+}
+
+
+export const getRecentOrders = async(cookieStored? : any) => {
+    try{    
+
+           console.log("Inside getting recent order items of buyer's********88");
+
+           const res = cookieStored ? await axios.get(`${BASE_URL}${BUYERS_ORDER_ENDPOINT.RECENTORDERS}` , {headers : {cookie : cookieStored}}) : 
+                                      await axios.get(`${BASE_URL}${BUYERS_ORDER_ENDPOINT.RECENTORDERS}` , {withCredentials : true})
+            console.log(res.data.result)
+           if(res.data.success){
+                return res.data.result
+           }
+           
+            return [];
+
+    } catch(err : unknown){
+        console.log("Error comes in getting recent order items of buyer's -> " , err);
+        return []
     }
 }

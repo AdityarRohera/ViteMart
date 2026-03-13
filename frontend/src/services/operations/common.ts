@@ -8,17 +8,17 @@ export const fetchCategories = async(cookieStored ? : any) => {
             const res = cookieStored ? await axios.get(`${BASE_URL}${CATEGORY_API_ENDPOINT.CATEGORIES}` , {headers : {cookie : cookieStored}})
                         : await axios.get(`${BASE_URL}${CATEGORY_API_ENDPOINT.CATEGORIES}` , {withCredentials : true});
 
-            console.log("Getting categories -> " , res);
+            // console.log("Getting categories -> " , res);
 
             if(res.data.success){
                 return res.data.categories
             }
 
-            return null;
+            return [];
 
     } catch(err : unknown){
         console.log("Error comes in fetching categories -> " , err);
-        return null
+        return []
     }
 }
 

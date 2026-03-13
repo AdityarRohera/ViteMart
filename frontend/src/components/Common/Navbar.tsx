@@ -15,7 +15,7 @@ export default function Navbar() {
    const pathname = usePathname();
    const {user , setUser} = useUser();
 
-  // console.log("context user -> " , user);
+  console.log("context user******************************************8 -> " , user);
 
   const logoutHandler = async() => {
     await logout();
@@ -37,10 +37,28 @@ export default function Navbar() {
         {/* Desktop Routes */}
         <div className="hidden md:flex items-center gap-8 text-gray-700 font-medium">
           <Link href={`${user ? '/dashboard' : '/'}`} className={`hover:text-indigo-600 transition ${pathname === '/' || pathname === '/dashboard' ? 'text-indigo-600' : ''}`}>{user ? "Dashboard" : "Home"}</Link>
-          <Link href="/shop" className={`hover:text-indigo-600 transition ${pathname === '/shop' ? 'text-indigo-600' : ''}`}>Shop</Link>
-          <Link href="/about" className={`hover:text-indigo-600 transition ${pathname === '/about' ? 'text-indigo-600' : ''}`}>About</Link>
+
+
+         {
+            user?.role === 'Vendor' ? 
+           <Link href="/dashboard/orders" className={`hover:text-indigo-600 transition ${pathname === '/dashboard/orders' ? 'text-indigo-600' : ''}`}>Orders</Link> : 
+           <Link href="/shop" className={`hover:text-indigo-600 transition ${pathname === '/shop' ? 'text-indigo-600' : ''}`}>Shop</Link>
+         }
+
+
+          {
+            user?.role === 'Vendor' ?
+            <Link href="/dashboard/product" className={`hover:text-indigo-600 transition ${pathname === '/dashboard/product' ? 'text-indigo-600' : ''}`}>Products</Link> : 
+            <Link href="/about" className={`hover:text-indigo-600 transition ${pathname === '/about' ? 'text-indigo-600' : ''}`}>About</Link>
+          }
+          
           <Link href="/contact" className={`hover:text-indigo-600 transition ${pathname === '/contact' ? 'text-indigo-600' : ''}`}>Contact</Link>
+          {
+            user?.role === "Buyer" ? <Link href="/shop/cart" className={`hover:text-indigo-600 transition ${pathname === '/shop/cart' ? 'text-indigo-600' : ''}`}>Cart</Link> : ''
+          }
         </div>
+
+        
 
         {/* Auth Buttons */}
         {

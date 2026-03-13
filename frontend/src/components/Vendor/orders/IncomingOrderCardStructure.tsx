@@ -46,7 +46,7 @@ const updateHandler = async () => {
 
 
 return (
-  <div className="bg-white rounded-2xl shadow-2xl hover:shadow-lg transition-all duration-300 p-6 w-110 max-w-3xl mx-auto border-">
+  <div className="bg-white rounded-2xl shadow-2xl hover:shadow-lg transition-all duration-300 p-6 w-full max-w-105">
 
     {/* Header */}
     <div className="flex justify-between items-start">
